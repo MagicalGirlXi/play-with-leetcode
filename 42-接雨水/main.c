@@ -2,45 +2,47 @@
  * @Author: magicgirlxi
  *
  *
- * 314 / 315 个通过测试用例
- * 状态：超出时间限制
+ * 315 / 315 个通过测试用例
+ * 状态：AC
  */
 #include <stdio.h>
 
 int trap(int *height, int heightSize)
 {
-	int sum = 0;
-	int stage = 0;
-	int maxheight = -1;
+	int ans = 0;
+	int maxHeight = 0;
 	for (int i = 0; i < heightSize; i++)
 	{
-		if (height[i] > maxheight)
-			maxheight = height[i];
-	}
-	for (stage = 0; stage < maxheight; stage++)
-	{
-		int flag = 0;
-		int loc = -1;
-		for (int i = 0; i < heightSize; i++)
+		if (height[i] >= height[maxHeight])
 		{
-			if (height[i] > stage)
-			{
-				if (flag == 0) //第一根柱子出现
-				{
-					flag = 1;
-					loc = i;
-				}
-				else
-				{
-					//printf("[i=%d, loc=%d] ", i, loc);
-					sum += i - loc - 1; //计算与前一根柱子的间距
-					loc = i;
-				}
-			}
+			maxHeight = i;
 		}
-		//printf("%d\n", sum);
 	}
-	return sum;
+	int maxLeft = 0;
+	for (int i = 0; i < maxHeight; i++)
+	{
+		if (height[i] < height[maxLeft])
+		{
+			ans += height[maxLeft] - height[i];
+		}
+		else
+		{
+			maxLeft = i;
+		}
+	}
+	int maxRight = heightSize - 1;
+	for (int i = maxRight; i > maxHeight; i--)
+	{
+		if (height[i] < height[maxRight])
+		{
+			ans += height[maxRight] - height[i];
+		}
+		else
+		{
+			maxRight = i;
+		}
+	}
+	return ans;
 }
 
 int main()
